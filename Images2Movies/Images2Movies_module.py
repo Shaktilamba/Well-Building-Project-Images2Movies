@@ -8,11 +8,11 @@ def folder_selection_dialog(test = 0):
     root = Tk()
     if test:
         root.title('Please select the "test" folder within the downloaded package.')
-        root.filename = filedialog.askdirectory(initialdir="/", title="Please select the "test" folder within the downloaded package.")
+        root.filename = filedialog.askdirectory(initialdir="/", title="Please select the 'test' folder within the downloaded package.")
     else: 
         root.title('Please select the directory containing the subfolders of image data')
         root.filename = filedialog.askdirectory(initialdir="/", title="Please select the directory containing the subfolders of image data")
-    simulation_directory = root.filename
+    parent_directory = root.filename
     root.destroy()
 
-    return simulation_directory
+    return parent_directory
