@@ -25,8 +25,8 @@ Date created: 11<sup>th</sup> August 2021
 <figure>
     <img src="https://github.com/SamHSoftware/Well-Building-Project-Images2Movies/blob/main/img/file_structure.png?raw=true" alt="The heirarchy of folders needed for the code to work" width="700"/>  
     <figcaption>Fig.1 - The heirarchy of folders needed for the code to work.</figcaption>
-</figure>
-<br>
+</figure>  
+  
 - It does not matter what the parent directories, wells or image folders are called, *providing* that they order correctly when you observe the folders when sorting by name. 
 - The DCIM folders *must* be named 'DCIM'. 
 - Your images can be ```.jpg``` or ```.png```. You will simply need to chnage a input arg in the code (explained below). 
@@ -41,8 +41,9 @@ It is often common practice to test that functions are working as exected. This 
 <figure>
     <img src="https://github.com/SamHSoftware/Well-Building-Project-Images2Movies/blob/main/img/folder_selection.PNG?raw=true" alt="A folder selection dialog box" width="500"/>
     <figcaption>Fig.2 - A folder selection dialog box.</figcaption>
-</figure>
-<br>
+</figure>  
+  
+
 ## How to use the code: 
 
 (1) Open the ```RUNME.ipynb``` script. By highlighting individual functions, you will be able to run the code sequentially. This is what we're going to do now. 
