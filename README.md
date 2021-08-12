@@ -22,7 +22,10 @@ Date created: 11<sup>th</sup> August 2021
 - This code expects there to be multiple 'parent' folders (a.k.a. directories), each of which contains the images for an individual village. Within this parent directory, there needs to be a specific hierarchy of folders. 
 - This image gives a visual explanation of how to organise the data:
 
-<img src="https://github.com/SamHSoftware/Well-Building-Project-Images2Movies/blob/main/img/file_structure.png?raw=true" alt="The heirarchy of folders needed for the code to work" width="700"/>  
+<figure>
+    <img src="https://github.com/SamHSoftware/Well-Building-Project-Images2Movies/blob/main/img/file_structure.png?raw=true" alt="The heirarchy of folders needed for the code to work" width="700"/>  
+    <figcaption>Fig.1 - The heirarchy of folders needed for the code to work.</figcaption>
+</figure>
 
 - It does not matter what the parent directories, wells or image folders are called, *providing* that they order correctly when you observe the folders when sorting by name. 
 - The DCIM folders *must* be named 'DCIM'. 
@@ -35,7 +38,10 @@ It is often common practice to test that functions are working as exected. This 
 
 (2) Run ```test_Images2Movies_module.ipynb```. A popup dialog box will appear (see example below), with which you should select the following folder: ```\Well-Building-Project-Images2Movies\tests\test_parent_dir\Well_1```. The script will consider each of the primary functions, and will check that they output the expected values. If assertion errors are raised, then you will need to debug the code, and may contact me for help. 
 
-<img src="https://github.com/SamHSoftware/Well-Building-Project-Images2Movies/blob/main/img/folder_selection.PNG?raw=true" alt="A folder selection dialog box" width="500"/>  
+<figure>
+    <img src="https://github.com/SamHSoftware/Well-Building-Project-Images2Movies/blob/main/img/folder_selection.PNG?raw=true" alt="A folder selection dialog box" width="500"/>
+    <figcaption>Fig.1 - A folder selection dialog box.</figcaption>
+</figure>
 
 ## How to use the code: 
 
@@ -57,4 +63,4 @@ This line imports the functions I wrote for this application. You can think of i
 parent_directory = folder_selection_dialog(test = 0)
 ```
 
-A popup dialog box will appear (see previous dialog box image). With this, you need to select the ```well_folder``` for which you want to create videos. The ```well_folders``` can be seen in th previous 
+A popup dialog box will appear (see previous dialog box image). With this, you need to select the ```well_folder``` for which you want to create videos. The ```well_folders``` can be seen in the figure
