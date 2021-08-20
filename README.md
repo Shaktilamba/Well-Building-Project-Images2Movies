@@ -57,39 +57,38 @@ from Images2Movies_module import *
 
 This line imports the functions I wrote for this application. You can think of it as loading up the scientific protocols for an experiment. 
 
-(3) Select and run the following code (you do not need to change any of the input args): 
+(3) Modify the following input arg: ```create_all_videos```. When ```create_all_videos = 1```, the code will ask you to select the parent directory, and will adjust to create videos from every single well directory. When ```create_all_videos = 0```, the code will ask you to select an individual well directory, and for which it will make an individual video.  
+
+(4) Select and run the following code (you do not need to change any of the input args): 
 ```
 # A function to allow the user to select the folder contianing the subfolders of images.
-# Function inputs args: test [bool] --> When 1, will change the gui title to that of the test gui. 
+# Function input arg 1: create_all_videos [bool] --> When 0, asks for the Well diirectory. When 1, asks for the directory containing the parents.
+# Function input arg 2: test [bool] --> When 1, will change the gui title to that of the test gui.
 # Function output 1: The path of the folder selected by the user. 
-well_directory = folder_selection_dialog(test = 0)
+folder_selection_dialog(create_all_videos = create_all_videos,
+                        test = 0)
 ```
 
-A popup dialog box will appear (see Fig.2). With this, you need to select the ```well_folder``` for which you want to create videos. The ```well_folders``` can be seen in Fig.1 as ```Well_1``` and ```Well_n```. 
-
-(4) Select and run the following code: 
-```
-# A function to create a list of image paths, such that these images can later be used to make a movie. 
-# Function input args: well_directory [string] --> The directory containing the subfolders of images. 
-# Function output arg 1: image_paths [list] --> A list of the image paths, where each path is a string. 
-image_paths = list_image_paths(well_directory)
-```
-This will fetch all the image paths to be used to make the video. 
+A popup dialog box will appear (see Fig.2). With this, you need to select the relevant folder (either the parent directory, or a well directory). The ```well_folders``` can be seen in Fig.1 as ```Well_1``` and ```Well_n```. 
 
 (5) Finally, select and run the final function:
 ```
 # A function to take the list of image paths, load in said images, and convert them to a movie. 
-# Function input arg 1:image_paths [list] --> A list of string directories for each image to be stiched into the video. The list represents the correct order of stiching.
-# Function input arg 2: well_directory [string] --> The well directory, as previously selected. 
-# Function input arg 3: frame_rate [int] --> The desired frame rate. 
-# Function input arg 4: movie_name [string] --> Your desired file name, including the file extension. Tested for .avi and .mp4. 
-# Function output 1: The movie will be saved to 'well_directory'. 
-create_movie(image_paths = image_paths,
-             well_directory = well_directory,
-             frame_rate = 1,
-             movie_name = 'my_movie_name.avi'):
+# Function input arg 1: selected_directory [string] --> The well or village directory, as previously selected. 
+# Function input arg 1: create_all_videos [bool] --> When 0, creates individual videos from the well directory. When 1, considers every well directory and makes videos for all of them.
+# Function input arg 3: frame_rate [string] --> The desired frame rate. Pretend the value between the quotation marks is an [int].
+# Function input arg 4: movie_extension [string] --> Your desired movie file extension. Tested for .avi and .mp4. 
+# Function input arg 4: bitrate [string] --> Bitrate at which video is exported.
+# Function output 1: The movie will be saved to 'selected_directory'. 
+create_movie(selected_directory,
+             create_all_videos = 0,
+             file_type = '.JPG',
+             frame_rate = '25',
+             movie_extension = '.mp4',
+             bitrate = '5000k',
+             video_width = 1920)
 ```
 
-You will notice that there are four input args. You don't need to change the first two. However, you can alter the frame rate, video name, and video file type in the final two functions.  
+You will notice that there are several input args. You don't need to change the first two. However, you might need to change all the others.  
 
-The video will be saved to your well directory. 
+The video(s) will be saved to your well folder(s). 
