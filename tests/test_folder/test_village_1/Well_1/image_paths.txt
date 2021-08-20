@@ -1,0 +1,4 @@
+file 'C:\Users\Samuel Huguet\OneDrive\Documents\GitHub\Well-Building-Project-Images2Movies\tests\test_folder\test_village_1\Well_1\renamed_images\0000001.png'
+file 'C:\Users\Samuel Huguet\OneDrive\Documents\GitHub\Well-Building-Project-Images2Movies\tests\test_folder\test_village_1\Well_1\renamed_images\0000002.png'
+file 'C:\Users\Samuel Huguet\OneDrive\Documents\GitHub\Well-Building-Project-Images2Movies\tests\test_folder\test_village_1\Well_1\renamed_images\0000003.png'
+file 'C:\Users\Samuel Huguet\OneDrive\Documents\GitHub\Well-Building-Project-Images2Movies\tests\test_folder\test_village_1\Well_1\renamed_images\0000004.png'
