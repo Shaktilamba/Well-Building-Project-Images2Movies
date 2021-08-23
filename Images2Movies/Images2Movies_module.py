@@ -111,16 +111,14 @@ def list_well_paths(selected_directory):
 # A function to take the list of image paths, load in said images, and convert them to a movie. 
 # Function input arg 1: selected_directory [string] --> The well or village directory, as previously selected. 
 # Function input arg 1: create_all_videos [bool] --> When 0, creates individual videos from the well directory. When 1, considers every well directory and makes videos for all of them.
-# Function input arg 3: frame_rate [string] --> The desired frame rate. Pretend the value between the quotation marks is an [int]. 
+# Function input arg 3: frame_rate [string] --> The desired frame rate. Pretend the value between the quotation marks is an [int].
 # Function input arg 4: movie_extension [string] --> Your desired movie file extension. Tested for .avi and .mp4. 
-# Function input arg 4: bitrate [string] --> Bitrate at which video is exported.
 # Function output 1: The movie will be saved to 'selected_directory'. 
 def create_movie(selected_directory,
                  create_all_videos = 0,
                  file_type = '.JPG',
-                 frame_rate = '25',
+                 frame_rate = '1',
                  movie_extension = '.mp4',
-                 bitrate = '5000k',
                  video_width = 1920):
     
     if create_all_videos == 0:
@@ -128,7 +126,7 @@ def create_movie(selected_directory,
         # Construct the movie name. 
         path_components = os.path.normpath(selected_directory).split(os.path.sep)
         n = len(path_components)
-        movie_name = (f"{path_components[n-2]}_{path_components[n-1]}_fps{frame_rate}_{bitrate}_w{video_width}{movie_extension}")
+        movie_name = (f"{path_components[n-2]}_{path_components[n-1]}_fps{frame_rate}_w{video_width}{movie_extension}")
 
         # Get the image paths. 
         renamed_images_dir, txt_path = rename_images(selected_directory,
@@ -144,7 +142,7 @@ def create_movie(selected_directory,
         (ffmpeg
             .input('image_paths.txt', r=frame_rate, f='concat', safe='0')
             .filter('scale', video_width, -1)
-            .output(movie_name, vcodec='libx264', video_bitrate=bitrate)
+            .output(movie_name, vcodec='libx264', pix_fmt='yuv420p')
             .run())
    
         # Remove the image_paths.txt file. 
@@ -167,7 +165,7 @@ def create_movie(selected_directory,
             # Construct the movie name. 
             path_components = os.path.normpath(well_paths[v]).split(os.path.sep)
             n = len(path_components)
-            movie_name = (f"{path_components[n-2]}_{path_components[n-1]}_fps{frame_rate}_{bitrate}_w{video_width}{movie_extension}")
+            movie_name = (f"{path_components[n-2]}_{path_components[n-1]}_fps{frame_rate}_w{video_width}{movie_extension}")
             
             # Get the image paths. 
             renamed_images_dir, txt_path = rename_images(well_paths[v],
@@ -183,7 +181,7 @@ def create_movie(selected_directory,
             (ffmpeg
                 .input('image_paths.txt', r=frame_rate, f='concat', safe='0')
                 .filter('scale', video_width, -1)
-                .output(movie_name, vcodec='libx264', video_bitrate=bitrate)
+                .output(movie_name, vcodec='libx264', pix_fmt='yuv420p')
                 .run())
             
             # Remove the image_paths.txt file. 

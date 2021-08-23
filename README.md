@@ -78,17 +78,15 @@ A popup dialog box will appear (see Fig.2). With this, you need to select the re
 # Function input arg 1: create_all_videos [bool] --> When 0, creates individual videos from the well directory. When 1, considers every well directory and makes videos for all of them.
 # Function input arg 3: frame_rate [string] --> The desired frame rate. Pretend the value between the quotation marks is an [int].
 # Function input arg 4: movie_extension [string] --> Your desired movie file extension. Tested for .avi and .mp4. 
-# Function input arg 4: bitrate [string] --> Bitrate at which video is exported.
 # Function output 1: The movie will be saved to 'selected_directory'. 
 create_movie(selected_directory,
              create_all_videos = 0,
              file_type = '.JPG',
              frame_rate = '25',
              movie_extension = '.mp4',
-             bitrate = '5000k',
              video_width = 1920)
 ```
 
 You will notice that there are several input args. You don't need to change the first two. However, you might need to change all the others.  
 
-The video(s) will be saved to your well folder(s). 
+The video(s) will be saved to your well folder(s) with the following format: villageName_wellName_fps{frame_rate}_w{video_width}.fileExtension
