@@ -164,9 +164,9 @@ def create_movie(selected_directory,
             f.close()   
 
             if (total_frames / 50) > movie_time: # Here, we use a frame rate of 50, but simulate a greater frame rate by subsampling images.  
-                subsampled_number_frames = 50 * movie_time
+                subsampled_number_frames = int(50 * movie_time)
                 arr = np.arange(total_frames)
-                idx = np.round(np.linspace(0, len(arr) - 1, subsampled_number_frames)).astype(int)
+                idx = np.round(np.linspace(0, (total_frames - 1), subsampled_number_frames)).astype(int)
                 with open(txt_path, 'w') as f:
                     lines = f.readlines()
                     del lines[idx]
@@ -226,9 +226,9 @@ def create_movie(selected_directory,
                 f.close()   
 
                 if (total_frames / 50) > movie_time: # Here, we use a frame rate of 50, but simulate a greater frame rate by subsampling images.  
-                    subsampled_number_frames = 50 * movie_time
+                    subsampled_number_frames = int(50 * movie_time)
                     arr = np.arange(total_frames)
-                    idx = np.round(np.linspace(0, len(arr) - 1, subsampled_number_frames)).astype(int)
+                    idx = np.round(np.linspace(0, (total_frames - 1), subsampled_number_frames)).astype(int)
                     with open(txt_path, 'w') as f:
                         lines = f.readlines()
                         del lines[idx]
