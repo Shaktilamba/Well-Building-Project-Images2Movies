@@ -130,9 +130,9 @@ def create_movie(selected_directory,
                  create_all_videos = 0,
                  file_type = '.JPG',
                  frame_rate = 0,
-                 movie_time = 1,
+                 movie_time = 0.2,
                  movie_extension = '.mp4',
-                 video_width = 2560):
+                 video_width = 1920):
     
     # Create an error to make sure variables are as they should be.
     assert (frame_rate == 0 and movie_time > 0) or (frame_rate > 0 and movie_time == 0), "One of frame_rate and movie_time need to equal 0, which the other needs to be greater than 0."
@@ -164,14 +164,18 @@ def create_movie(selected_directory,
             f.close()   
 
             if (total_frames / 50) > movie_time: # Here, we use a frame rate of 50, but simulate a greater frame rate by subsampling images.  
-                subsampled_number_frames = int(50 * movie_time)
-                arr = np.arange(total_frames)
-                idx = np.round(np.linspace(0, (total_frames - 1), subsampled_number_frames)).astype(int)
-                with open(txt_path, 'w') as f:
-                    lines = f.readlines()
-                    del lines[idx]
-                f.close() 
-                frame_rate = 50
+                    subsampled_number_frames = int(50 * movie_time)
+                    arr = np.arange(total_frames)
+                    idx = np.round(np.linspace(0, (total_frames - 1), subsampled_number_frames)).astype(int)
+                    with open(txt_path, 'r') as f:
+                        lines = f.readlines()
+                    f.close() 
+                    with open(txt_path, "w") as f:
+                        for x in range(len(lines)):
+                            if x in idx:
+                                f.write(lines[x])
+                    f.close()
+                    frame_rate = 50
             else: # Here, we lower the frame rate below 50. 
                 time_per_frame = movie_time / total_frames
                 frame_rate = 1 / time_per_frame
@@ -229,10 +233,14 @@ def create_movie(selected_directory,
                     subsampled_number_frames = int(50 * movie_time)
                     arr = np.arange(total_frames)
                     idx = np.round(np.linspace(0, (total_frames - 1), subsampled_number_frames)).astype(int)
-                    with open(txt_path, 'w') as f:
+                    with open(txt_path, 'r') as f:
                         lines = f.readlines()
-                        del lines[idx]
                     f.close() 
+                    with open(txt_path, "w") as f:
+                        for x in range(len(lines)):
+                            if x in idx:
+                                f.write(lines[x])
+                    f.close()
                     frame_rate = 50
                 else: # Here, we lower the frame rate below 50. 
                     time_per_frame = movie_time / total_frames
