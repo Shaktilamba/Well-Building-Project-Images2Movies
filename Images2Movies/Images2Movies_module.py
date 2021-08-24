@@ -100,17 +100,17 @@ def rename_images(selected_directory,
 # A function to return the list of well folders, such that images with can later be used to make a movie. 
 # Function input arg 1: selected_directory [string] --> The directory containing the well folders of images. 
 # Function output 1: well_paths [list] --> A list of the well_folder paths, where each path is a string. 
-def list_well_paths(selected_directory):
+def list_well_paths(parent_directory):
     
     # First, list the subfolders in the well directory.
-    subfolders = [_ for _ in os.listdir(selected_directory) if '.' not in _]
+    subfolders = [_ for _ in os.listdir(selected_directory) if ('.' not in _) and ('renamed_images' not in _)]
 
     # Iterate through the list of village_directories and extract the well_directories contained within them. 
     well_paths = []
     for i in range(len(subfolders)):
         
         subfolder_dir = os.path.join(selected_directory, subfolders[i])
-        well_directories = [os.path.join(subfolder_dir, _) for _ in os.listdir(subfolder_dir) if '.' not in _]
+        well_directories = [os.path.join(subfolder_dir, _) for _ in os.listdir(subfolder_dir) if ('.' not in _) and ('ignore' not in _)]
         well_paths.append(well_directories)
         
     well_paths = [path for sublist in well_paths for path in sublist]
