@@ -75,16 +75,20 @@ A popup dialog box will appear (see Fig.2). With this, you need to select the re
 ```
 # A function to take the list of image paths, load in said images, and convert them to a movie. 
 # Function input arg 1: selected_directory [string] --> The well or village directory, as previously selected. 
-# Function input arg 1: create_all_videos [bool] --> When 0, creates individual videos from the well directory. When 1, considers every well directory and makes videos for all of them.
-# Function input arg 3: frame_rate [string] --> The desired frame rate. Pretend the value between the quotation marks is an [int].
-# Function input arg 4: movie_extension [string] --> Your desired movie file extension. Tested for .avi and .mp4. 
+# Function input arg 2: create_all_videos [bool] --> When 0, creates individual videos from the well directory. When 1, considers every well directory and makes videos for all of them.
+# Function input arg 3: file_type [string] --> The image file type which is searched for to create the movies.
+# Function input arg 4: frame_rate [int] --> Desired frame rate. !!!SET TO 0 IF YOU USE movie_time!!!
+# Function input arg 5: movie_time [int] --> Desired movie length (min). !!!SET TO 0 IF YOU USE frame_rate!!!
+# Function input arg 6: movie_extension [string] --> Your desired movie file extension. Tested for .avi and .mp4. 
+# Function input arg 7: video_width [int] --> The desired video width (the height will be altered proportionally. 
 # Function output 1: The movie will be saved to 'selected_directory'. 
 create_movie(selected_directory,
              create_all_videos = 0,
              file_type = '.JPG',
-             frame_rate = '25',
+             frame_rate = 0,
+             movie_time = 1,
              movie_extension = '.mp4',
-             video_width = 1920)
+             video_width = 2560)
 ```
 
 You will notice that there are several input args. You don't need to change the first two. However, you might need to change all the others.  

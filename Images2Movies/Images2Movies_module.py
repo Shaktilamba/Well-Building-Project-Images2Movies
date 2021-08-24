@@ -6,6 +6,8 @@ import time as time
 import math
 import ffmpeg 
 import subprocess
+import datetime as dt
+import numpy as np
 
 # A function to allow the user to select the folder contianing the subfolders of images.
 # Function input arg 1: create_all_videos [bool] --> When 0, asks for the Well diirectory. When 1, asks for the directory containing the village folders.
@@ -44,8 +46,15 @@ def rename_images(selected_directory,
     if not os.path.exists(renamed_images_dir):
         os.makedirs(renamed_images_dir)
     
-    # First, list the subfolders in the well directory.
+    # First, list the subfolders in the well directory in the correct date order.
     subfolders = [_ for _ in os.listdir(selected_directory) if ('.' not in _) and ('renamed_images' not in _)]
+    subfolders_dates = [re.findall(r"\d{8}", _) for _ in subfolders]
+    subfolders_dates = [_ for sublist in subfolders_dates for _ in sublist]
+    subfolders_dates = [datetime(year=int(_[4:8]), month=int(_[2:4]), day=int(_[0:2])) for _ in subfolders_dates]
+    zipped_lists = zip(subfolders_dates, subfolders) 
+    sorted_pairs = sorted(zipped_lists)
+    tuples = zip(*sorted_pairs)
+    subfolder_dates, subfolders = [list(tuple) for tuple in tuples]
     
     # Create our txt file to store file names. 
     txt_path = os.path.join(selected_directory, "image_paths.txt")
@@ -110,19 +119,26 @@ def list_well_paths(selected_directory):
 
 # A function to take the list of image paths, load in said images, and convert them to a movie. 
 # Function input arg 1: selected_directory [string] --> The well or village directory, as previously selected. 
-# Function input arg 1: create_all_videos [bool] --> When 0, creates individual videos from the well directory. When 1, considers every well directory and makes videos for all of them.
-# Function input arg 3: frame_rate [string] --> The desired frame rate. Pretend the value between the quotation marks is an [int].
-# Function input arg 4: movie_extension [string] --> Your desired movie file extension. Tested for .avi and .mp4. 
+# Function input arg 2: create_all_videos [bool] --> When 0, creates individual videos from the well directory. When 1, considers every well directory and makes videos for all of them.
+# Function input arg 3: file_type [string] --> The image file type which is searched for to create the movies.
+# Function input arg 4: frame_rate [int] --> Desired frame rate. !!!SET TO 0 IF YOU USE movie_time!!!
+# Function input arg 5: movie_time [int] --> Desired movie length (min). !!!SET TO 0 IF YOU USE frame_rate!!!
+# Function input arg 6: movie_extension [string] --> Your desired movie file extension. Tested for .avi and .mp4. 
+# Function input arg 7: video_width [int] --> The desired video width (the height will be altered proportionally. 
 # Function output 1: The movie will be saved to 'selected_directory'. 
 def create_movie(selected_directory,
                  create_all_videos = 0,
                  file_type = '.JPG',
-                 frame_rate = '1',
+                 frame_rate = 0,
+                 movie_time = 1,
                  movie_extension = '.mp4',
-                 video_width = 1920):
+                 video_width = 2560):
+    
+    # Create an error to make sure variables are as they should be.
+    assert (frame_rate == 0 and movie_time > 0) or (frame_rate > 0 and movie_time == 0), "One of frame_rate and movie_time need to equal 0, which the other needs to be greater than 0."
     
     if create_all_videos == 0:
-    
+
         # Construct the movie name. 
         path_components = os.path.normpath(selected_directory).split(os.path.sep)
         n = len(path_components)
@@ -138,7 +154,30 @@ def create_movie(selected_directory,
         # Start recording the processing duration.
         t = time.time() 
 
-        # Create the movie. 
+        # Determine the correct frame rate (or correct sampling of images) to create a video of movie_time in length.         
+        if (frame_rate == 0 and movie_time > 0):
+            movie_time = movie_time *60 # Convert to seconds. 
+
+            with open(txt_path, 'r') as f:
+                nonempty_lines = [line.strip("\n") for line in f if line != "\n"]
+                total_frames = len(nonempty_lines)
+            f.close()   
+
+            if (total_frames / 50) > movie_time: # Here, we use a frame rate of 50, but simulate a greater frame rate by subsampling images.  
+                subsampled_number_frames = 50 * movie_time
+                arr = np.arange(total_frames)
+                idx = np.round(np.linspace(0, len(arr) - 1, subsampled_number_frames)).astype(int)
+                with open(txt_path, 'w') as f:
+                    lines = f.readlines()
+                    del lines[idx]
+                f.close() 
+                frame_rate = 50
+            else: # Here, we lower the frame rate below 50. 
+                time_per_frame = movie_time / total_frames
+                frame_rate = 1 / time_per_frame
+            
+        # Create the video.
+        frame_rate = str(frame_rate)
         (ffmpeg
             .input('image_paths.txt', r=frame_rate, f='concat', safe='0')
             .filter('scale', video_width, -1)
@@ -177,7 +216,30 @@ def create_movie(selected_directory,
             # Start recording the processing duration.
             t = time.time() 
             
+            # Determine the correct frame rate (or correct sampling of images) to create a video of movie_time in length. 
+            if (frame_rate == 0 and movie_time > 0):
+                movie_time = movie_time *60 # Convert to seconds. 
+
+                with open(txt_path, 'r') as f:
+                    nonempty_lines = [line.strip("\n") for line in f if line != "\n"]
+                    total_frames = len(nonempty_lines)
+                f.close()   
+
+                if (total_frames / 50) > movie_time: # Here, we use a frame rate of 50, but simulate a greater frame rate by subsampling images.  
+                    subsampled_number_frames = 50 * movie_time
+                    arr = np.arange(total_frames)
+                    idx = np.round(np.linspace(0, len(arr) - 1, subsampled_number_frames)).astype(int)
+                    with open(txt_path, 'w') as f:
+                        lines = f.readlines()
+                        del lines[idx]
+                    f.close() 
+                    frame_rate = 50
+                else: # Here, we lower the frame rate below 50. 
+                    time_per_frame = movie_time / total_frames
+                    frame_rate = 1 / time_per_frame
+            
             # Create the movie.
+            frame_rate = str(frame_rate)
             (ffmpeg
                 .input('image_paths.txt', r=frame_rate, f='concat', safe='0')
                 .filter('scale', video_width, -1)
