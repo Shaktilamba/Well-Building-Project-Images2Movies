@@ -22,7 +22,7 @@ folder_selection_dialog(create_all_videos = 0,
 # Function input arg 8: subsampling_rate [float] --> A variable to be used when you want the biggest movie to be of a particular length, and all other videos to be subsampled proportionally. !!!SET TO 0 WHEN USING frame_rate or movie_time!!!. Wen set to above 0, ensure frame_rate=0 and movie_time=0. Calculated with: (50 * desired time for biggest movie in seconds) / number of images in biggest movie.
 # Function output 1: The movie will be saved to 'selected_directory'. 
 create_movie(selected_directory,
-             create_all_videos = 1,
+             create_all_videos = create_all_videos,
              file_type = '.JPG',
              frame_rate = 0,
              movie_time = 5,

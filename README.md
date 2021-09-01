@@ -16,7 +16,7 @@ Date created: 11<sup>th</sup> August 2021
 (1) Anaconda: This is an immensely useful platform from which you can download the correct version of many languages with their respective packages. Anaconda also allows you to create specific environments for specific projects. You can manage packages and environments outside of Anaconda should you wish.  
 (2) Python 3.7. This can be installed through Anaconda.  
 (3) An IDE (Integrated development environment). This is the software which allows you to easily interact with the code. I would recommend JupyterLab, for which I have included many ```.ipynb``` files. JupyterLab can be installed through Anaconda.   
-(4) The packages required to create the correct environment. The package list will be stored [here](XXX).   
+(4) The packages required to create the correct environment. The package list will be stored [here - see environment.yml, package-list.txt and requirements.txt](https://github.com/SamHSoftware/Well-Building-Project-Images2Movies).   
 
 ## The code expects your data to be organised in the following way: 
 - This code expects there to be a single 'parent' folder (a.k.a. directories), which contains all the folders for individual villages. In my case, the parent directory was the (D:) drive, representing the hard-drive I was using.  
@@ -28,7 +28,8 @@ Date created: 11<sup>th</sup> August 2021
     <figcaption>Fig.1 - The heirarchy of folders needed for the code to work.</figcaption>
 </figure>  
   
-- It does not matter what the parent directory, village folder, well folders, image folders or EK folders are called, *providing* that they order correctly when you observe the folders when sorting by name. E.g. If you're making a video for Well_X, then you'd want the folder ```100EK``` to come before folder ```101EK``` when sorting by name in windows explorer. 
+- It does not matter what the parent directory, village folder, well folders or EK folders are called, *providing* that they order correctly when you observe the folders when sorting by name. E.g. If you're making a video for Well_X, then you'd want the folder ```100EK``` to come before folder ```101EK``` when sorting by name in windows explorer. 
+- The Imagefolders must have a 8 digit date within their name, organised as DDMMYYYY. Do not seperate the parts of this date with any characters, including spaces and underscores.
 - The DCIM folders *must* be named 'DCIM'. 
 - Your images can be ```.jpg``` or ```.png```. You will simply need to chnage a input arg in the code (explained below). This input arg will be case sensitive! 
 
@@ -43,7 +44,6 @@ It is often common practice to test that functions are working as exected. This 
     <img src="https://github.com/SamHSoftware/Well-Building-Project-Images2Movies/blob/main/img/folder_selection.PNG?raw=true" alt="A folder selection dialog box" width="500"/>
     <figcaption>Fig.2 - A folder selection dialog box.</figcaption>
 </figure>  
-  
 
 ## How to use the code: 
 
@@ -62,10 +62,10 @@ This line imports the functions I wrote for this application. You can think of i
 (4) Select and run the following code (you do not need to change any of the input args): 
 ```
 # A function to allow the user to select the folder contianing the subfolders of images.
-# Function input arg 1: create_all_videos [bool] --> When 0, asks for the Well diirectory. When 1, asks for the directory containing the parents.
+# Function input arg 1: create_all_videos [bool] --> When 0, asks for the Well diirectory. When 1, asks for the parent directory (contains the village folder).
 # Function input arg 2: test [bool] --> When 1, will change the gui title to that of the test gui.
 # Function output 1: The path of the folder selected by the user. 
-folder_selection_dialog(create_all_videos = create_all_videos,
+folder_selection_dialog(create_all_videos = 0,
                         test = 0)
 ```
 
@@ -73,24 +73,31 @@ A popup dialog box will appear (see Fig.2). With this, you need to select the re
 
 (5) Finally, select and run the final function:
 ```
-# A function to take the list of image paths, load in said images, and convert them to a movie. 
+# A function to organise the creation of movies. 
 # Function input arg 1: selected_directory [string] --> The well or village directory, as previously selected. 
 # Function input arg 2: create_all_videos [bool] --> When 0, creates individual videos from the well directory. When 1, considers every well directory and makes videos for all of them.
 # Function input arg 3: file_type [string] --> The image file type which is searched for to create the movies.
-# Function input arg 4: frame_rate [int] --> Desired frame rate. !!!SET TO 0 IF YOU USE movie_time!!!
-# Function input arg 5: movie_time [int] --> Desired movie length (min). !!!SET TO 0 IF YOU USE frame_rate!!!
+# Function input arg 4: frame_rate [int] --> Desired frame rate. !!!SET TO 0 IF YOU USE movie_time or subsampling_rate!!!
+# Function input arg 5: movie_time [int] --> Desired movie length (min). !!!SET TO 0 IF YOU USE frame_rate or subsampling_rate!!!
 # Function input arg 6: movie_extension [string] --> Your desired movie file extension. Tested for .avi and .mp4. 
 # Function input arg 7: video_width [int] --> The desired video width (the height will be altered proportionally. 
+# Function input arg 8: subsampling_rate [float] --> A variable to be used when you want the biggest movie to be of a particular length, and all other videos to be subsampled proportionally. !!!SET TO 0 WHEN USING frame_rate or movie_time!!!. Wen set to above 0, ensure frame_rate=0 and movie_time=0. Calculated with: (50 * desired time for biggest movie in seconds) / number of images in biggest movie.
 # Function output 1: The movie will be saved to 'selected_directory'. 
 create_movie(selected_directory,
-             create_all_videos = 0,
+             create_all_videos = create_all_videos,
              file_type = '.JPG',
              frame_rate = 0,
-             movie_time = 1,
+             movie_time = 5,
              movie_extension = '.mp4',
-             video_width = 2560)
+             video_width = 1920,
+             subsampling_rate = 0)
 ```
 
 You will notice that there are several input args. You don't need to change the first two. However, you might need to change all the others.  
+
+There are three types of video that you can make:  
+- A ```frame_rate``` video: When specifying ```frame_rate```, ensure ```movie_time``` and ```subsampling_rate``` are set to 0. Provide an integer value for the frame rate you desire. Please do not specify a ```frame_rate``` above 60, as your monitor will not be able to handle it, 
+- A ```movie_time``` video: When specifying ```movie_time```, ensure ```frame_rate``` and ```subsampling_rate``` are set to 0. Provide a value in minutes to control how long your video will be. For large image sequences which need to be shown over brief periods of time, the frame rate will auomatically be set to 50, and the images will be subsampled to give the illusion of speed (this is necessary as we can't use frame rates above 60). For short image sequences, automatically selectes a frame rate between 1 and 50.  
+- A ```subsampling_rate``` video: Let's say your biggest image sequence works well as a 5 minute video. As previously mentioned, this image sequence will be subsampled. Perhaps you want all your other videos to be subsampled at the same frequency. This is where you should use ```subsampling_rate```. When specifying ```subsampling_rate```, ensure ```frame_rate``` and ```movie_time``` are set to 0. To calculate ```subsampling_rate```, use: (50 * desired time for biggest movie in seconds) / number of images in biggest movie.  
 
 The video(s) will be saved to your well folder(s) with the following format: villageName_wellName_fps{frame_rate}_w{video_width}.fileExtension
