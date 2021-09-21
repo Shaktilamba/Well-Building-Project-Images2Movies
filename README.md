@@ -96,8 +96,21 @@ create_movie(selected_directory,
 You will notice that there are several input args. You don't need to change the first two. However, you might need to change all the others.  
 
 There are three types of video that you can make:  
-- A ```frame_rate``` video: When specifying ```frame_rate```, ensure ```movie_time``` and ```subsampling_rate``` are set to 0. Provide an integer value for the frame rate you desire. Please do not specify a ```frame_rate``` above 60, as your monitor will not be able to handle it. 
-The video(s) will be saved to your well folder(s) with the following format: {villageName}_{wellName}_fps{frame_rate}_w{video_width}{movie_extension}.
-- A ```movie_time``` video: When specifying ```movie_time```, ensure ```frame_rate``` and ```subsampling_rate``` are set to 0. Provide a value in minutes to control how long your video will be. For large image sequences which need to be shown over brief periods of time, the frame rate will auomatically be set to 50, and the images will be subsampled to give the illusion of speed (this is necessary as we can't use frame rates above 60). For short image sequences, automatically selectes a frame rate between 1 and 50. 
-The video(s) will be saved to your well folder(s) with the following format: {villageName}_{wellName}_fixedLength_w{video_width}{movie_extension}.
-- A ```subsampling_rate``` video: Let's say your biggest image sequence works well as a 5 minute video. As previously mentioned, this image sequence will be subsampled. Perhaps you want all your other videos to be subsampled at the same frequency. This is where you should use ```subsampling_rate```. When specifying ```subsampling_rate```, ensure ```frame_rate``` and ```movie_time``` are set to 0. To calculate ```subsampling_rate```, use: (50 * desired time for biggest movie in seconds) / number of images in biggest movie. The video(s) will be saved to your well folder(s) with the following format: {villageName}_{wellName}_PSR_w{video_width}{movie_extension}, where PSR stands for Proportional Sampling Rate.
+* A ```frame_rate``` video:
+  * These videos have a constant frame rate. Thus, the movies will be of varying durations.
+  * When specifying ```frame_rate```, ensure ```movie_time``` and ```subsampling_rate``` are set to 0.  
+  * Provide an integer value for the frame rate you desire. 
+  * Please do not specify a ```frame_rate``` above 50, as your monitor will not be able to handle it. 
+  * The video(s) will be saved to your well folder(s) with the following format: {villageName}\_{wellName}\_fps{frame_rate}\_w{video_width}{movie_extension}.
+* A ```movie_time``` video: 
+  * These videos have a constant duration. To achieve this, other video properties must vary. If the image sequence is short, and needs to be shown slowly, a low frame rate between 1 and 50 will be automatically selected. If the image sequence is large, and needs to be shown quickly to view it over the required duration, then it's entirely possible that a frame rate of 50 will be insufficient. Thus, above this threshold (which is calculated automatically in the code) the code skips images to speed up the video. When only certain images are shown, it is referred to as subsampling. 
+  * When specifying ```movie_time```, ensure ```frame_rate``` and ```subsampling_rate``` are set to 0. 
+  * Provide a value in minutes to control how long your video will be. 
+  * The video(s) will be saved to your well folder(s) with the following format: {villageName}\_{wellName}\_fixedLength_w{video_width}{movie_extension}.
+* A ```subsampling_rate``` video: 
+  * These videos have fixed rates of subsampling (so that that all looks like they're the same speed), have fixed frame rates of 50 fps, but have varying durations.
+  * Let's say you have a specific image sequence (SIS) which works well as a 5 minute video. Let's say that this SIS is very long, and cannot be created using a frame rate between 1 and 50. Thus, this SIS would be subsampled at a specific rate, one calculated by the code.   
+  * Perhaps you want all your other videos to be subsampled at the same frequency, so that all your videos appear to have the same speed. This is where you should use the ```subsampling_rate``` arg. 
+  * When specifying ```subsampling_rate```, ensure ```frame_rate``` and ```movie_time``` are set to 0. 
+  * You will need to calculate ```subsampling_rate```. To calculate ```subsampling_rate```, use: (50 * desired duration for SIS in seconds) / number of images in SIS. 
+  * The video(s) will be saved to your well folder(s) with the following format: {villageName}\_{wellName}\_PSR_w{video_width}{movie_extension}, where PSR stands for Proportional Sampling Rate.
