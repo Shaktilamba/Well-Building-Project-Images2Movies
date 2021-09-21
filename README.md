@@ -11,6 +11,25 @@ Date created: 11<sup>th</sup> August 2021
 - At this time of writing, Dr. Lamba is a researcher at The University of Exeter, Penryn campus. Her interest lies in "how people cooperate to solve public goods dilemmas", and in how this cooperation has evolved. 
 - I have included ```.ipynb``` and ```.py``` file, so that JupyterLab can be easily used alongside other IDEs. 
 
+## Package architecture: 
+* Images2Movies: 
+  * This is where the main code is stored. 
+  * There are module files (these contain the individual functions) and RUNME files (these actually call (use) the functions). 
+  * There are ```.py``` files for general purpose IDEs, and ```.ipynb``` files for JupyterLab.
+* img:
+  * This is where images are stored. These images are used to illustrate this README document. 
+  * There is also a power point file in case you want to a diagram similar to Fig. 1.
+* .gitignore: 
+  * I use software called 'Git Bash' to sync my local files with those within this GitHub repositry. The .gitignore file contains a list of directories (e.g. text files with project notes), and prevents Git Bash from uplodaing them; I don't want to clutter up this repo!
+* LICENCE.txt:
+  * The licence explaining how this code can be used. 
+* README.md:
+  * The file which creates the README for this code. 
+* environment.yml:
+  * A file to allow you to re-create this code's environment in conda. 
+* requirements.txt:
+  * A file to allow you to re-create this code's environment using pip. 
+
 ## Software requirements to run the code: 
 - You can run this code on your own computer for free, providing you download and install the following software:  
 (1) Anaconda: This is an immensely useful platform from which you can download the correct version of many languages with their respective packages. Anaconda also allows you to create specific environments for specific projects. You can manage packages and environments outside of Anaconda should you wish.  
@@ -100,15 +119,15 @@ There are three types of video that you can make:
   * These videos have a constant frame rate. Thus, the movies will be of varying durations.
   * When specifying ```frame_rate```, ensure ```movie_time``` and ```subsampling_rate``` are set to 0.  
   * Provide an integer value for the frame rate you desire. 
-  * Please do not specify a ```frame_rate``` above 50, as your monitor will not be able to handle it. 
+  * Please do not specify a ```frame_rate``` above 50, as your monitor may not be able to handle it. 
   * The video(s) will be saved to your well folder(s) with the following format: {villageName}\_{wellName}\_fps{frame_rate}\_w{video_width}{movie_extension}.
 * A ```movie_time``` video: 
-  * These videos have a constant duration. To achieve this, other video properties must vary. If the image sequence is short, and needs to be shown slowly, a low frame rate between 1 and 50 will be automatically selected. If the image sequence is large, and needs to be shown quickly to view it over the required duration, then it's entirely possible that a frame rate of 50 will be insufficient. Thus, above this threshold (which is calculated automatically in the code) the code skips images to speed up the video. When only certain images are shown, it is referred to as subsampling. 
+  * These videos have a constant duration. To achieve this, other video properties must vary. If the image sequence is short, and needs to be shown slowly, a low frame rate between 1 and 50 will be automatically selected. If the image sequence is large, and needs to be shown quickly to view it over the required duration, then it's entirely possible that a frame rate of 50 will be insufficient. Thus, above this threshold (which is calculated automatically in the code) the code skips images to speed up the video. When only certain images are shown, it is referred to as subsampling. Image sequences of different sizes will have different subsampling rates.
   * When specifying ```movie_time```, ensure ```frame_rate``` and ```subsampling_rate``` are set to 0. 
   * Provide a value in minutes to control how long your video will be. 
   * The video(s) will be saved to your well folder(s) with the following format: {villageName}\_{wellName}\_fixedLength_w{video_width}{movie_extension}.
 * A ```subsampling_rate``` video: 
-  * These videos have fixed rates of subsampling (so that that all looks like they're the same speed), have fixed frame rates of 50 fps, but have varying durations.
+  * These videos have fixed rates of subsampling (so that that all they look like they're the same speed), have fixed frame rates of 50 fps, but have varying durations.
   * Let's say you have a specific image sequence (SIS) which works well as a 5 minute video. Let's say that this SIS is very long, and cannot be created using a frame rate between 1 and 50. Thus, this SIS would be subsampled at a specific rate, one calculated by the code.   
   * Perhaps you want all your other videos to be subsampled at the same frequency, so that all your videos appear to have the same speed. This is where you should use the ```subsampling_rate``` arg. 
   * When specifying ```subsampling_rate```, ensure ```frame_rate``` and ```movie_time``` are set to 0. 
